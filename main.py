@@ -12,7 +12,7 @@ def test_speed():
         st.upload()
         results = st.results.dict()
         return results['download'] / 1000, results['upload'] / 1000  # Convert to Kb/s
-    except (speedtest.SpeedtestBestServerFailure, speedtest.ConfigRetrievalError) as e:
+    except Exception as e:
         print(f"Error: {e}. Skipping this measurement.")
         return None, None
 
