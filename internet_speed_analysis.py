@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the CSV file into a DataFrame
-file_path = '/mnt/data/speedtest_results.csv'
+file_path = 'speedtest_results.csv'
 speedtest_results = pd.read_csv(file_path)
 
 # Convert the Timestamp column to datetime format
