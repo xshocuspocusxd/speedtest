@@ -6,10 +6,14 @@ from datetime import datetime
 # Function to test the internet connection speed
 def test_speed():
     st = speedtest.Speedtest()
-    st.download()
-    st.upload()
-    results = st.results.dict()
-    return results['download'] / 1000, results['upload'] / 1000  # Convert to Kb/s
+    try:
+        st.download()
+        st.upload()
+        results = st.results.dict()
+        return results['download'] / 1000, results['upload'] / 1000  # Convert to Kb/s
+    except speedtest.SpeedtestBestServerFailure as e:
+        print(f"Error: {e}. Skipping this measurement.")
+        return None, None
 
 # Function to save results to a CSV file
 def save_to_csv(timestamp, download, upload, filename='speedtest_results.csv'):
@@ -37,9 +41,10 @@ def main():
         while True:
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             download, upload = test_speed()
-            save_to_csv(timestamp, download, upload, filename)
-            print(f'{timestamp} - Download: {download:.2f} Kb/s, Upload: {upload:.2f} Kb/s')
-            countdown(300)  # Countdown for 1 minutes (60 seconds)
+            if download is not None and upload is not None:
+                save_to_csv(timestamp, download, upload, filename)
+                print(f'{timestamp} - Download: {download:.2f} Kb/s, Upload: {upload:.2f} Kb/s')
+            countdown(60)  # Countdown for 1 minute (60 seconds)
     except KeyboardInterrupt:
         print('Program terminated.')
 
